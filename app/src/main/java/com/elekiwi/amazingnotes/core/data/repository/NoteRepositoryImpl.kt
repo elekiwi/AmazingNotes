@@ -7,7 +7,7 @@ import com.elekiwi.amazingnotes.core.data.mapper.toNoteItem
 import com.elekiwi.amazingnotes.core.domain.model.NoteItem
 import com.elekiwi.amazingnotes.core.domain.repository.NoteRepository
 
-class NoteRepositoryImpl(
+class  NoteRepositoryImpl(
     noteDb: NoteDb
 ): NoteRepository {
 

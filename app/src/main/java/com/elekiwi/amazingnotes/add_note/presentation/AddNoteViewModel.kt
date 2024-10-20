@@ -51,7 +51,7 @@ class AddNoteViewModel @Inject constructor(
                          description = _addNoteState.value.description,
                          imageUrl = _addNoteState.value.imageUrl
                      )
-                    _noteSavedChannel.send(isSaved)  
+                    _noteSavedChannel.send(isSaved)
                 }
             }
 
