@@ -2,9 +2,13 @@ package com.elekiwi.amazingnotes.add_note.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.elekiwi.amazingnotes.add_note.domain.use_case.SearchImages
 import com.elekiwi.amazingnotes.add_note.domain.use_case.UpsertNote
+import com.elekiwi.amazingnotes.add_note.presentation.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -14,8 +18,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddNoteViewModel @Inject constructor(
-     private  val upsertNote: UpsertNote
-): ViewModel(){
+    private val upsertNote: UpsertNote,
+    private val searchImages: SearchImages
+) : ViewModel() {
 
     private val _addNoteState = MutableStateFlow(AddNoteState())
     val addNoteState = _addNoteState.asStateFlow()
@@ -30,27 +35,39 @@ class AddNoteViewModel @Inject constructor(
                     it.copy(title = action.newTitle)
                 }
             }
+
             is AddNoteActions.UpdateDescription -> {
                 _addNoteState.update {
                     it.copy(description = action.newDescription)
                 }
-             }
+            }
+
             is AddNoteActions.PickImage -> {
-                TODO()
+                _addNoteState.update {
+                    it.copy(imageUrl = action.imageUrl)
+                }
             }
+
             AddNoteActions.UpdateImagesDialogVisibility -> {
-                TODO()
+                _addNoteState.update {
+                    it.copy(isImagesDialogShowing = !it.isImagesDialogShowing)
+                }
             }
+
             is AddNoteActions.UpdateSearchImageQuery -> {
-                TODO()
+                _addNoteState.update {
+                    it.copy(searchImagesQuery = action.newQuery)
+                }
+                searchImages(action.newQuery)
             }
+
             AddNoteActions.SaveNote -> {
                 viewModelScope.launch {
-                     val isSaved = upsertNote(
-                          title = _addNoteState.value.title,
-                         description = _addNoteState.value.description,
-                         imageUrl = _addNoteState.value.imageUrl
-                     )
+                    val isSaved = upsertNote(
+                        title = _addNoteState.value.title,
+                        description = _addNoteState.value.description,
+                        imageUrl = _addNoteState.value.imageUrl
+                    )
                     _noteSavedChannel.send(isSaved)
                 }
             }
@@ -64,5 +81,32 @@ class AddNoteViewModel @Inject constructor(
         description: String,
         imageUrl: String
     ): Boolean {
-        return upsertNote.invoke(title, description, imageUrl)}
+        return upsertNote.invoke(title, description, imageUrl)
+    }
+
+    private var searchJob: Job? = null
+
+    fun searchImages(query: String) {
+        searchJob?.cancel()
+        searchJob = viewModelScope.launch {
+            delay(500)
+            searchImages.invoke(query)
+                .collect { result ->
+                    when (result) {
+                        is Resource.Error -> _addNoteState.update {
+                            it.copy(imageList = emptyList())
+                        }
+
+                        is Resource.Loading -> _addNoteState.update {
+                            it.copy(isLoadingImages = result.isLoading)
+                        }
+
+                        is Resource.Success -> _addNoteState.update {
+                            it.copy(imageList = result.data?.images ?: emptyList())
+                        }
+                    }
+                }
+        }
+
+    }
 }

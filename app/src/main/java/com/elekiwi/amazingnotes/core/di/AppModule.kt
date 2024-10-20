@@ -2,10 +2,13 @@ package com.elekiwi.amazingnotes.core.di
 
 import android.app.Application
 import androidx.room.Room
+import com.elekiwi.amazingnotes.add_note.domain.use_case.SearchImages
 import com.elekiwi.amazingnotes.add_note.domain.use_case.UpsertNote
 import com.elekiwi.amazingnotes.core.data.local.NoteDb
 import com.elekiwi.amazingnotes.core.data.remote.api.ImagesApi
+import com.elekiwi.amazingnotes.core.data.repository.ImagesRepositoryImpl
 import com.elekiwi.amazingnotes.core.data.repository.NoteRepositoryImpl
+import com.elekiwi.amazingnotes.core.domain.repository.ImagesRepository
 import com.elekiwi.amazingnotes.core.domain.repository.NoteRepository
 import com.elekiwi.amazingnotes.note_list.domain.use_case.DeleteNote
 import com.elekiwi.amazingnotes.note_list.domain.use_case.GetAllNotes
@@ -66,6 +69,18 @@ class AppModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ImagesApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+        fun provideImagesRepository(imagesApi: ImagesApi): ImagesRepository {
+        return ImagesRepositoryImpl(imagesApi)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSearchImagesUseCase(imagesRepository: ImagesRepository): SearchImages {
+        return SearchImages(imagesRepository)
     }
 
 }

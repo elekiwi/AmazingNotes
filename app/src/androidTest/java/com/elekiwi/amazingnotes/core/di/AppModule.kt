@@ -5,7 +5,9 @@ import androidx.room.Room
 import com.elekiwi.amazingnotes.add_note.domain.use_case.UpsertNote
 import com.elekiwi.amazingnotes.core.data.local.NoteDb
 import com.elekiwi.amazingnotes.core.data.remote.api.ImagesApi
+import com.elekiwi.amazingnotes.core.data.repository.FakeAndroidImagesRepository
 import com.elekiwi.amazingnotes.core.data.repository.FakeAndroidNoteRepository
+import com.elekiwi.amazingnotes.core.domain.repository.ImagesRepository
 import com.elekiwi.amazingnotes.core.domain.repository.NoteRepository
 import com.elekiwi.amazingnotes.note_list.domain.use_case.DeleteNote
 import com.elekiwi.amazingnotes.note_list.domain.use_case.GetAllNotes
@@ -53,7 +55,13 @@ class TestAppModule {
     @Provides
     @Singleton
     fun provideUpsertNoteUseCase(noteRepository: NoteRepository): UpsertNote {
-        return UpsertNote(  noteRepository)
+        return UpsertNote(noteRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideImagesRepository(): ImagesRepository {
+        return FakeAndroidImagesRepository()
     }
 
     @Provides
@@ -65,4 +73,6 @@ class TestAppModule {
             .build()
             .create(ImagesApi::class.java)
     }
+
+
 }

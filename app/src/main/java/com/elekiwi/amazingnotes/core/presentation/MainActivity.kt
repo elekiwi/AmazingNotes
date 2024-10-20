@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.elekiwi.amazingnotes.add_note.presentation.AddNoteScreen
 import com.elekiwi.amazingnotes.core.presentation.ui.theme.AmazingNotesTheme
 import com.elekiwi.amazingnotes.note_list.presentation.NoteListScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -45,7 +46,11 @@ class MainActivity : ComponentActivity() {
             }
 
             composable<Screen.AddNote> {
-
+                AddNoteScreen(
+                    onSave = {
+                        navController.popBackStack()
+                    }
+                )
             }
         }
     }
