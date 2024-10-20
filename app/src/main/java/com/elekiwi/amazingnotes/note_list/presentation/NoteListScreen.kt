@@ -1,4 +1,4 @@
-package com.elekiwi.amazingnotes.note_list.presentation
+ package com.elekiwi.amazingnotes.note_list.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
