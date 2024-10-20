@@ -2,6 +2,7 @@ package com.elekiwi.amazingnotes.core.di
 
 import android.app.Application
 import androidx.room.Room
+import com.elekiwi.amazingnotes.add_note.domain.use_case.UpsertNote
 import com.elekiwi.amazingnotes.core.data.local.NoteDb
 import com.elekiwi.amazingnotes.core.data.repository.FakeAndroidNoteRepository
 import com.elekiwi.amazingnotes.core.domain.repository.NoteRepository
@@ -46,4 +47,9 @@ class TestAppModule {
         return DeleteNote(noteRepository)
     }
 
+    @Provides
+    @Singleton
+    fun provideUpsertNoteUseCase(noteRepository: NoteRepository): UpsertNote {
+        return UpsertNote(  noteRepository)
+    }
 }
