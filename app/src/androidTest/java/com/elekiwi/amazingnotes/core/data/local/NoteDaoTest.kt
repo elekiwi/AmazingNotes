@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltAndroidTest
 @SmallTest
-@UninstallModules(AppModule::class )
+@UninstallModules(AppModule::class)
 class NoteDaoTest  {
 
     @get:Rule
