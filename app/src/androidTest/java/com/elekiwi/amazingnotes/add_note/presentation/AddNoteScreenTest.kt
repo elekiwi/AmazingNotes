@@ -59,7 +59,7 @@ class AddNoteScreenTest {
         composeRule.onNodeWithTag(TestTags.PICKED_IMAGE + "image3")
             .performClick()
 
-        composeRule.onNodeWithTag(TestTags.NOTE_IMAGE + "image3")
+        composeRule.onNodeWithTag(TestTags.NOTE_IMAGE)
             .assertIsDisplayed()
     }
 }

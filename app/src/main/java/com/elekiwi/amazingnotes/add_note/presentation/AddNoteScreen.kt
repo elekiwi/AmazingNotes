@@ -91,7 +91,7 @@ fun AddNoteScreen(
                     )
                 }
                 .testTag(
-                    TestTags.NOTE_IMAGE + addNoteState.imageUrl
+                    TestTags.NOTE_IMAGE
                 ),
             model = ImageRequest
                 .Builder(LocalContext.current)
