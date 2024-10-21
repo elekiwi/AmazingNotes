@@ -91,7 +91,7 @@ fun AddNoteScreen(
                     )
                 }
                 .testTag(
-                    TestTags.NOTE_IMAGE
+                    TestTags.NOTE_IMAGE + addNoteState.imageUrl
                 ),
             model = ImageRequest
                 .Builder(LocalContext.current)
@@ -116,7 +116,7 @@ fun AddNoteScreen(
                 )
             },
             label = {
-                Text(text = stringResource(R.string.title))
+                Text(text = stringResource(R .string.title))
             },
             maxLines = 4
         )
