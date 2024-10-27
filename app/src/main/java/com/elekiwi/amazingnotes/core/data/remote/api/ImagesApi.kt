@@ -15,6 +15,6 @@ interface ImagesApi  {
 
     companion object {
         const val BASE_URL = "https://pixabay.com"
-        const val API_KEY = "26068644-4f41ddc6880abbfcbdbc389ae"
+        const val API_KEY = "xxx"
     }
 }
